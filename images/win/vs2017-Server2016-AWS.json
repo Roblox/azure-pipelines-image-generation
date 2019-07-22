@@ -3,7 +3,7 @@
         "instance_type": "t2.large",
         "vpc_id": "{{env `AWS_VPC_ID`}}",
         "subnet_id": "{{env `AWS_SUBNET_ID`}}",
-        "ami_name": "azdo-agent-{{ isotime  \"2006-01-02T15:04:05Z\" }}",
+        "ami_name": "azdo-agent-{{ isotime  \"2006-01-02T15.04.05Z\" }}",
         "image_folder": "C:\\image",
         "commit_file": "C:\\image\\commit.txt",
         "metadata_file": "C:\\image\\metadata.txt",
