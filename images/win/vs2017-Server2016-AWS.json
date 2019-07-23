@@ -13,7 +13,8 @@
         "commit_id": "LATEST",
         "install_user": "installer",
         "install_password": "{{ uuid }}",
-        "image_version": "dev"
+        "image_version": "dev",
+        "user_data_file": "./scripts/Enable-WinRM.ps1"
     },
     "builders": [
         {
@@ -23,7 +24,7 @@
             "secret_key": "{{user `secret_key`}}",
             "region": "us-west-1",
             "instance_type": "{{user `instance_type` }}",
-            "user_data_file": "./scripts/Enable-WinRM.ps1",
+            "user_data_file": "{{user `user_data_file`}}",
             "vpc_id": "{{user `vpc_id` }}",
             "subnet_id": "{{user `subnet_id` }}",
             "communicator": "winrm",
