@@ -23,14 +23,15 @@
             "secret_key": "{{user `secret_key`}}",
             "region": "us-west-1",
             "instance_type": "{{user `instance_type` }}",
-            "ami_name": "{{user `ami_name` }}",
+            "user_data_file": "./scripts/Enable-WinRM.ps1",
             "vpc_id": "{{user `vpc_id` }}",
             "subnet_id": "{{user `subnet_id` }}",
             "communicator": "winrm",
             "winrm_use_ssl": "true",
             "winrm_insecure": "true",
-            "winrm_username": "packer",
+            "winrm_username": "Administrator",
             "ssh_interface": "private_ip",
+            "ami_name": "{{user `ami_name` }}",
             "source_ami_filter": {
                 "filters": {
                     "name": "Windows_Server-2016-English-Core-Base-*"
