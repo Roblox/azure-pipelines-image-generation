@@ -32,9 +32,22 @@
             "winrm_username": "Administrator",
             "ssh_interface": "private_ip",
             "ami_name": "{{user `ami_name` }}",
+            "ami_block_device_mappings":[{
+                "device_name": "/dev/sda1",
+                "volume_size": 64,
+                "volume_type": "gp2",
+                "delete_on_termination": "true"
+            }],
+            "launch_block_device_mappings":[{
+                "device_name": "/dev/sda1",
+                "volume_size": 64,
+                "volume_type": "gp2",
+                "delete_on_termination": "true"
+            }],
             "source_ami_filter": {
                 "filters": {
-                    "name": "Windows_Server-2016-English-Core-Base-*"
+                    "name": "Windows_Server-2016-English-Core-Base-*",
+                    "root-device-type": "ebs"
                 },
                 "owners": [
                     "801119661308"
