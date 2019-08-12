@@ -39,15 +39,15 @@ else {
     exit 1
 }
 
-$WixPackage = Get-WixExtensionPackage
+# # $WixPackage = Get-WixExtensionPackage
 
-if($WixPackage) {
-    Write-Host "Wix Extension version" $WixPackage.version "installed"
-}
-else {
-    Write-Host "Wix Extension is not installed"
-    exit 1
-}
+# # if($WixPackage) {
+# #     Write-Host "Wix Extension version" $WixPackage.version "installed"
+# # }
+# # else {
+# #     Write-Host "Wix Extension is not installed"
+# #     exit 1
+# # }
 
 
 # Adding description of the software to Markdown

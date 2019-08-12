@@ -14,7 +14,10 @@ Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/dotnet/core/master/rel
 $dotnetReleases = Get-Content -Path 'dotnet-releases.json' | ConvertFrom-Json
 
 #Filtering dotnet sdk and runtime versions which does not have "-" in their name, based on naming pattern they are either preview or rc versions
-$dotnetReleases = $dotnetReleases | Where-Object {!$_."version-sdk".Contains('-') } | Sort-Object {[Version] $_."version-sdk"}
+$dotnetReleases = $dotnetReleases |
+    Where-Object {!$_."version-sdk".Contains('-') } |
+    Where-Object {!$_."version-sdk".Contains("2.2.105")}
+    Sort-Object {[Version] $_."version-sdk"}
 
 Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile 'dotnet-install.ps1'
 

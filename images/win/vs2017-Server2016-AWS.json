@@ -5,7 +5,7 @@
         "instance_type": "t2.large",
         "vpc_id": "{{env `AWS_VPC_ID`}}",
         "subnet_id": "{{env `AWS_SUBNET_ID`}}",
-        "ami_name": "azdo-agent-{{ isotime  \"2006-01-02T15.04.05Z\" }}",
+        "ami_name": "azdo-win-agent-{{ isotime  \"2006-01-02T15.04.05Z\" }}",
         "image_folder": "C:\\image",
         "commit_file": "C:\\image\\commit.txt",
         "metadata_file": "C:\\image\\metadata.txt",
@@ -32,18 +32,22 @@
             "winrm_username": "Administrator",
             "ssh_interface": "private_ip",
             "ami_name": "{{user `ami_name` }}",
-            "ami_block_device_mappings":[{
-                "device_name": "/dev/sda1",
-                "volume_size": 64,
-                "volume_type": "gp2",
-                "delete_on_termination": "true"
-            }],
-            "launch_block_device_mappings":[{
-                "device_name": "/dev/sda1",
-                "volume_size": 64,
-                "volume_type": "gp2",
-                "delete_on_termination": "true"
-            }],
+            "ami_block_device_mappings": [
+                {
+                    "device_name": "/dev/sda1",
+                    "volume_size": 128,
+                    "volume_type": "gp2",
+                    "delete_on_termination": "true"
+                }
+            ],
+            "launch_block_device_mappings": [
+                {
+                    "device_name": "/dev/sda1",
+                    "volume_size": 128,
+                    "volume_type": "gp2",
+                    "delete_on_termination": "true"
+                }
+            ],
             "source_ami_filter": {
                 "filters": {
                     "name": "Windows_Server-2016-English-Core-Base-*",
@@ -145,12 +149,6 @@
         },
         {
             "type": "powershell",
-            "scripts": [
-                "{{ template_dir }}/scripts/Installers/Vs2017/Update-DockerImages.ps1"
-            ]
-        },
-        {
-            "type": "powershell",
             "inline": [
                 "choco install vcredist140 -y"
             ]
@@ -166,23 +164,6 @@
             ],
             "elevated_user": "{{user `install_user`}}",
             "elevated_password": "{{user `install_password`}}"
-        },
-        {
-            "type": "windows-restart",
-            "restart_timeout": "30m"
-        },
-        {
-            "type": "powershell",
-            "valid_exit_codes": [
-                0,
-                3010
-            ],
-            "scripts": [
-                "{{ template_dir }}/scripts/Installers/Vs2017/Install-SSDT.ps1"
-            ],
-            "elevated_user": "{{user `install_user`}}",
-            "elevated_password": "{{user `install_password`}}",
-            "pause_before": "120s"
         },
         {
             "type": "windows-restart",
@@ -219,12 +200,6 @@
         {
             "type": "windows-restart",
             "restart_timeout": "30m"
-        },
-        {
-            "type": "powershell",
-            "scripts": [
-                "{{ template_dir }}/scripts/Installers/Vs2017/Validate-SSDT.ps1"
-            ]
         },
         {
             "type": "powershell",
@@ -717,9 +692,8 @@
         {
             "type": "powershell",
             "inline": [
-                "if( Test-Path $Env:SystemRoot\\System32\\Sysprep\\unattend.xml ){ rm $Env:SystemRoot\\System32\\Sysprep\\unattend.xml -Force}",
-                "& $env:SystemRoot\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /quiet /quit",
-                "while($true) { $imageState = Get-ItemProperty HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\State | Select ImageState; if($imageState.ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') { Write-Output $imageState.ImageState; Start-Sleep -s 10  } else { break } }"
+                "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\InitializeInstance.ps1 -Schedule",
+                "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\SysprepInstance.ps1 -NoShutdown"
             ]
         }
     ]
